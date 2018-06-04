@@ -12,20 +12,6 @@
             $this->name='Micoso';
             $this->tab='front_office_features';
             $this->displayName='Modulo de pruebas';
-<?php
-    class MiCoso extends Module
-    {
-        public function install(){
-            parent::install();
-            $this->registerHook('displayProductTabContent');
-            return true;
-        }
-
-        public function __construct()
-        {
-            $this->name='Micoso';
-            $this->tab='front_office_features';
-            $this->displayName='Modulo de pruebas';
             $this->version='1.0';
             $this->author='Ignacio Casado';
             $this->description='Modulo de prueba';
