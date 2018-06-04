@@ -12,6 +12,20 @@
             $this->name='Micoso';
             $this->tab='front_office_features';
             $this->displayName='Modulo de pruebas';
+<?php
+    class MiCoso extends Module
+    {
+        public function install(){
+            parent::install();
+            $this->registerHook('displayProductTabContent');
+            return true;
+        }
+
+        public function __construct()
+        {
+            $this->name='Micoso';
+            $this->tab='front_office_features';
+            $this->displayName='Modulo de pruebas';
             $this->version='1.0';
             $this->author='Ignacio Casado';
             $this->description='Modulo de prueba';
@@ -44,7 +58,16 @@
         }
         public function DisplayProductTabContent(){
             if (Tools::isSubmit('mymod_pc_submit_comment')) {
-                
+                $id_produc=Tools::getValue('id_product');
+                $grade=Tools::getValue('grade');
+                $comment=Tools::getValue('comment');
+                $insert=array(
+                    'id_product'=>(int) $id_produc,
+                    'grade'=>(int) $grade,
+                    'comment'=>pSQL($comment),
+                    'date_add'=>date('Y-m-d-H:i:s'),);
+                )
+                Db::getInstance()->insert('mymod_comment',$insert);
             }
         }
     }
