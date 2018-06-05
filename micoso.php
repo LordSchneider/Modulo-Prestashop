@@ -26,7 +26,7 @@
             $this->name='Micoso';
             $this->tab='front_office_features';
             $this->displayName='Modulo de pruebas';
-            $this->version='1.0';
+            $this->version='1.1';
             $this->author='Ignacio Casado';
             $this->description='Modulo de prueba';
             $this->bootstrap=true;
@@ -53,10 +53,7 @@
             $this->assignConfiguration();
             return $this->display(__FILE__,'getContent.tpl');
         }
-        public function hookDisplayProductTabContent($params){
-            return $this->display(__FILE__,'displayProductTabContent.tpl');
-        }
-        public function DisplayProductTabContent(){
+        public function processProductTabContent(){
             if (Tools::isSubmit('mymod_pc_submit_comment')) {
                 $id_produc=Tools::getValue('id_product');
                 $grade=Tools::getValue('grade');
@@ -64,12 +61,14 @@
                 $insert=array(
                     'id_product'=>(int) $id_produc,
                     'grade'=>(int) $grade,
-                    'comment'=>pSQL($comment),
+                    'COMMENT'=>pSQL($comment),
                     'date_add'=>date('Y-m-d-H:i:s'),
                 );
-                
                 Db::getInstance()->insert('mymod_comment',$insert);
             }
+        }
+        public function hookDisplayProductTabContent($params){
+            return $this->display(__FILE__,'displayProductTabContent.tpl');
         }
         public function assignProductTabContent(){
             $enable_grades=Configuration::get('MYMOD_GRADES');
