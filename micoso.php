@@ -3,7 +3,21 @@
     {
         public function install(){
             parent::install();
+            $sql_file=dirname(__FILE__).'/install/install.sql';
+            $this->loadSQLFile($sql_file);
             $this->registerHook('displayProductTabContent');
+            if (!parent::install()) {
+                return false;
+            }
+            $sql_file=dirname(__FILE__).'/install/install.sql';
+            if (!$this->loadSQLFile($sql_file)) {
+                return false;
+            }
+            if (!$this->registerHook('displayProductTabContent')) {
+                return false;
+            }
+            Configuration::updateValue('MYMOD_GRADES','1');
+            Configuration::updateValue('MYMOD_COMMENTS','1');
             return true;
         }
 
@@ -51,8 +65,9 @@
                     'id_product'=>(int) $id_produc,
                     'grade'=>(int) $grade,
                     'comment'=>pSQL($comment),
-                    'date_add'=>date('Y-m-d-H:i:s'),);
-                )
+                    'date_add'=>date('Y-m-d-H:i:s'),
+                );
+                
                 Db::getInstance()->insert('mymod_comment',$insert);
             }
         }
@@ -62,7 +77,7 @@
             $id_produc=Tools::getValue('id_product');
             $comment=Db::getInstace()->executeS('SELECT * FROM '._DB_PREFIX_.'mymod_comment WHERE id_product = '.(int)$id_produc);
             $this->context->smarty->assign('enable_grades',$enable_grades);
-            $this->context->smarty->assign('enable_comments'$enable_comments);
+            $this->context->smarty->assign('enable_comments',$enable_comments);
             $this->context->smarty->assign('comments',$comment);
             $this->context->controller->addCSS($this->_path.'views/css/micoso.css','all');
             $this->context->controller->addJS($this->_path.'views/js/micoso.js','all');
@@ -70,21 +85,6 @@
             $this->context->smarty->assign('comments',$comment);
             Db::getInstance()->insert('mymod_comment',$insert);
             $this->context->smarty->assign('new_comment_posted','true');
-        }
-        public function install(){
-            if (!parent::install()) {
-                return false;
-            }
-            $sql_file=dirname(__FILE__).'/install/install.sql';
-            if (!$this->loadSQLFile($sql_file)) {
-                return false;
-            }
-            if (!$this->registerHook('displayProductTabContent')) {
-                return false;
-            }
-            Configuration::updateValue('MYMOD_GRADES','1');
-            Configuration::updateValue('MYMOD_COMMENTS','1');
-            return true;
         }
         public function uninstall(){
             if (!parent::uninstall()) {
@@ -97,5 +97,15 @@
             Configuration::deleteByName('MYMOD_GRADES');
             Configuration::deleteByName('MYMOD_COMMENTS');
             return true;
+        }
+        public function loadSQLFile($sql_file){
+            $sql_content=file_get_contents($sql_file);
+            $sql_content=str_replace('PREFIX_','_DB_PREFIX',$sql_content);
+            $sql_request=preg_split("/;\s*[\r\n]+/",$sql_content);
+            $result=true;
+            if (!empty($request)) {
+                $result &=Db::getInstance()->execute(trim($request));
+                return $result;
+            }
         }
     }
