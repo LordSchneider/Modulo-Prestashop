@@ -64,5 +64,11 @@
             $this->context->smarty->assign('enable_grades',$enable_grades);
             $this->context->smarty->assign('enable_comments'$enable_comments);
             $this->context->smarty->assign('comments',$comment);
+            $this->context->controller->addCSS($this->_path.'views/css/micoso.css','all');
+            $this->context->controller->addJS($this->_path.'views/js/micoso.js','all');
+            $this->context->smarty->assign('enable_comments',$enable_comments);
+            $this->context->smarty->assign('comments',$comment);
+            Db::getInstance()->insert('mymod_comment',$insert);
+            $this->context->smarty->assign('new_comment_posted','true');
         }
     }
