@@ -1,6 +1,6 @@
 <?php
     class MiCoso extends Module
-    {
+    {/*
         public function install(){
             parent::install();
             $sql_file=dirname(__FILE__).'/install/install.sql';
@@ -20,7 +20,7 @@
             Configuration::updateValue('MYMOD_COMMENTS','1');
             return true;
         }
-
+            */
         public function __construct()
         {
             $this->name='Micoso';
@@ -61,7 +61,7 @@
                 $insert=array(
                     'id_product'=>(int) $id_produc,
                     'grade'=>(int) $grade,
-                    'COMMENT'=>pSQL($comment),
+                    'comment'=>pSQL($comment),
                     'date_add'=>date('Y-m-d-H:i:s'),
                 );
                 Db::getInstance()->insert('mymod_comment',$insert);
@@ -69,7 +69,7 @@
         }
         public function hookDisplayProductTabContent($params){
             return $this->display(__FILE__,'displayProductTabContent.tpl');
-        }
+        }/*
         public function DisplayProductTabContent(){
         }
         public function assignProductTabContent(){
@@ -108,5 +108,5 @@
                 $result &=Db::getInstance()->execute(trim($request));
                 return $result;
             }
-        }
+        }*/
     }
