@@ -1,4 +1,9 @@
-{if isset($confirmation) }
+    {if isset($css_files)}
+        {foreach from=$css_files key=css_uri item=media}
+            <link rel="stylesheet" href="{$css_uri}" type="text/css" media=""{$media}"/>
+        {/foreach}
+    {/if}
+    {if isset($confirmation) }
         <div class="alert alert-success">GUARDADO</div>
     {/if}                            
 <fieldset>
