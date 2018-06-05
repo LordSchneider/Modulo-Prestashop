@@ -71,4 +71,31 @@
             Db::getInstance()->insert('mymod_comment',$insert);
             $this->context->smarty->assign('new_comment_posted','true');
         }
+        public function install(){
+            if (!parent::install()) {
+                return false;
+            }
+            $sql_file=dirname(__FILE__).'/install/install.sql';
+            if (!$this->loadSQLFile($sql_file)) {
+                return false;
+            }
+            if (!$this->registerHook('displayProductTabContent')) {
+                return false;
+            }
+            Configuration::updateValue('MYMOD_GRADES','1');
+            Configuration::updateValue('MYMOD_COMMENTS','1');
+            return true;
+        }
+        public function uninstall(){
+            if (!parent::uninstall()) {
+                return false;
+            }
+            $sql_file=dirname(__FILE__).'/install/uninstall.sql';
+            if (!$this->loadSQLFile($sql_file)) {
+                return false;
+            }
+            Configuration::deleteByName('MYMOD_GRADES');
+            Configuration::deleteByName('MYMOD_COMMENTS');
+            return true;
+        }
     }
