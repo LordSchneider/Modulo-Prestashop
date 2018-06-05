@@ -56,4 +56,13 @@
                 Db::getInstance()->insert('mymod_comment',$insert);
             }
         }
+        public function assignProductTabContent(){
+            $enable_grades=Configuration::get('MYMOD_GRADES');
+            $enable_comments=Configuration::get('MYMOD_COMMENTS');
+            $id_produc=Tools::getValue('id_product');
+            $comment=Db::getInstace()->executeS('SELECT * FROM '._DB_PREFIX_.'mymod_comment WHERE id_product = '.(int)$id_produc);
+            $this->context->smarty->assign('enable_grades',$enable_grades);
+            $this->context->smarty->assign('enable_comments'$enable_comments);
+            $this->context->smarty->assign('comments',$comment);
+        }
     }
