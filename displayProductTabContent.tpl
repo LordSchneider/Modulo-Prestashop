@@ -1,13 +1,14 @@
+dadsaadsadsdsadsa
 {if #enable_grades eq 1}
-<div class="form-group">
-    <label for="grade">Puntuacion: </label>
-    <div class="row">
-        <div class="col-xs-4">
-            <select id="grade" class="form-control" name="grade"
-            </select>
+    <div class="form-group">
+        <label for="grade">Puntuacion: </label>
+        <div class="row">
+            <div class="col-xs-4">
+                <select id="grade" class="form-control" name="grade"
+                </select>
+            </div>
         </div>
     </div>
-</div>
 {/if}
 {if $enable_comments eq 1}
     <div class="form-group">
@@ -16,16 +17,16 @@
         </textarea>
     </div>
 {/if}
-<h3 class="page-product-heading" id="mymod-contents-tab" {if isset($new_comment_posted)} data-scroll="true" {/if}>
-    {l s='Product Comments' mod='mymodcomments'}
-</h3>
+    <h3 class="page-product-heading" id="mymod-contents-tab" {if isset($new_comment_posted)} data-scroll="true" {/if}>
+        {l s='Product Comments' mod='mymodcomments'}
+    </h3>
     <div class="rte">
     {foreach from=$comment item=comment}
-    <p>
-        <strong> Comentario # {$comment.id_mymod_comment}:
-        </strong>{$comment.comment}<br>
-        <strong> Puntuacion: </strong>
-        {$comment.grade}/5<br>
+        <p>
+            <strong> Comentario # {$comment.id_mymod_comment}:
+            </strong>{$comment.comment}<br>
+            <strong> Puntuacion: </strong>
+            {$comment.grade}/5<br>
         </p><br>
     {/foreach}
     </div>
