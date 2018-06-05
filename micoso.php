@@ -70,6 +70,8 @@
         public function hookDisplayProductTabContent($params){
             return $this->display(__FILE__,'displayProductTabContent.tpl');
         }
+        public function DisplayProductTabContent(){
+        }
         public function assignProductTabContent(){
             $enable_grades=Configuration::get('MYMOD_GRADES');
             $enable_comments=Configuration::get('MYMOD_COMMENTS');
