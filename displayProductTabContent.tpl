@@ -1,4 +1,4 @@
- <h3 class="page-product-heading" id="mymod-contents-tab" >
+  <h3 class="page-product-heading" id="mymod-contents-tab" >
      Comentarios del producto
     </h3>
     <div class="rte">
@@ -25,13 +25,11 @@
                         </select>
                     </div>
                 </div>
+                <label for="coment">Comentario: </label>
+                <input type="text" name="coment" id="coment">
             </div>
-        <div class="form-group">
-            <label for="comment">Comentario: </label>
-            <textarea name="comment" id="comment"  class="form-control"/>
-        </div>
             <div class="submit">
-                <button type="submit" name="mymod_pc_submit_comment" class="button btn btn-default-button-default">
+                <input type="submit" name="mymod_pc_submit_comment" class="button btn btn-default-button-default">
                 <span>Mandar<i class="icon-chevron-rigth rigth"></i></span>
             </div>
         </form>
