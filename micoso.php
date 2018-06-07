@@ -44,7 +44,8 @@
                 $id_product=Tools::getValue('id_product');
                 $grade=Tools::getValue('grade');
                 if ($grade!=0) {
-                    $comment=Tools::getValue('coment');
+                    $comment=Tools::getValue('comment');
+                    echo "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
                     echo $comment;
                     $comment=strval(pSQL($comment));
                     if ($comment=='') {
