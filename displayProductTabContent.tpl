@@ -1,16 +1,18 @@
+   
   <h3 class="page-product-heading" id="mymod-contents-tab" >
      Comentarios del producto
     </h3>
+    
     <div class="rte">
-        {foreach from=$comments item=comment}
-            <p>
-            <strong> Comentario #{$comment.id_mymod_comment}:</strong>
-            {$comment.comment}<br>
-            <strong> Puntuacion:{$comment.grade}/5<br>
-            </p><br>
-        {/foreach}
-    </div>
         <form action="" method="POST" id="comment-form">
+        {if $enable_grades eq 1}
+            {foreach from=$comments item=comment}
+                <p>
+                <strong> Comentario #{$comment.id_mymod_comment}:</strong>
+                {$comment.comment}<br>
+                <strong> Puntuacion:{$comment.grade}/5<br>
+                </p><br>
+            {/foreach}
             <div class="form-group">
                 <label for="grade"> Puntuacion: </label>
                 <div class="row">
@@ -25,11 +27,18 @@
                         </select>
                     </div>
                 </div>
-                <label for="coment">Comentario: </label>
-                <input type="text" name="coment" id="coment">
             </div>
-            <div class="submit">
-                <input type="submit" name="mymod_pc_submit_comment" class="button btn btn-default-button-default">
+        {/if}
+        {if $enable_comments eq 1}
+            
+            <div class="form-group">
+                <label for="comment">Comentario: </label>
+                <textarea  name="comment" id="comment" ></textarea>
+            </div>
+        {/if}
+        <div class="submit">
+                <button type="submit" name="mymod_pc_submit_comment" class="button btn btn-default-button-default">
                 <span>Mandar<i class="icon-chevron-rigth rigth"></i></span>
             </div>
         </form>
+     </div>
