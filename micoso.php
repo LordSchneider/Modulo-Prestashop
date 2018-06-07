@@ -43,14 +43,24 @@
             if (Tools::isSubmit('mymod_pc_submit_comment'))  {
                 $id_product=Tools::getValue('id_product');
                 $grade=Tools::getValue('grade');
-                $comment=pSQL(Tools::getValue('comment'));
-                $insert=array(
-                    'id_product'=>(int) $id_product,
-                    'grade'=>(int) $grade,
-                    'comment'=>$comment,
-                    'date_add'=>date('Y-m-d H:i:s'),
-                );
-                Db::getInstance()->insert('mymod_comment',$insert);
+                if ($grade!=0) {
+                    $comment=Tools::getValue('coment');
+                    echo $comment;
+                    $comment=strval(pSQL($comment));
+                    if ($comment=='') {
+                        
+                    }else{
+                        $insert=array(
+                        'id_product'=>(int) $id_product,
+                        'grade'=>(int) $grade,
+                        'comment'=>pSQL("$comment"),
+                        'date_add'=>date('Y-m-d H:i:s'),
+                    );
+                    Db::getInstance()->insert('mymod_comment',$insert);
+                    }
+                    
+                }
+                
             }
         }
         public function hookDisplayProductTabContent($params){
