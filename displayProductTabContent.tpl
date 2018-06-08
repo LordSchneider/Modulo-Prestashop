@@ -1,8 +1,5 @@
-   
-  <h3 class="page-product-heading" id="mymod-contents-tab" >
-     Comentarios del producto
-    </h3>
-    
+   {if $enable_grades eq 1 || $enable_comments eq 1}
+  <h3 class="page-product-heading" id="mymodcomments-content-tab"{if isset($new_comment_posted)} data-scroll="true"{/if}>{l s='Comentarios del producto' mod='mymodcomments'}</h3>
     <div class="rte">
         <form action="" method="POST" id="comment-form">
         {if $enable_grades eq 1}
@@ -17,7 +14,7 @@
                 <label for="grade"> Puntuacion: </label>
                 <div class="row">
                     <div class="col-xs-4">
-                        <select id="grade" class="form-control" name="grade">
+                        <select id="grade" name="grade" class="form-control" name="grade">
                             <option value="0"> --Elegir-- </option>
                             <option value="1"> 1 </option>
                             <option value="2"> 2 </option>
@@ -42,3 +39,4 @@
             </div>
         </form>
      </div>
+{/if}
