@@ -1,114 +1,35 @@
-<?php
-    class MiCoso extends Module
-    {
-        
-        public function loadSQLFile($sql_file){
-            $sql_content=file_get_contents($sql_file);
-            $sql_content=str_replace('PREFIX_',_DB_PREFIX_,$sql_content);
-            $sql_requests=preg_split("/;\s*[\r\n]+/",$sql_content);
-            $result=true;
-            foreach($sql_requests as $request)
-            if(!empty($request))
-            $result &=Db::getInstance()->execute(trim($request));
-            return $result;
-        }
-        public function __construct()
-        {
-            $this->name='Micoso';
-            $this->tab='front_office_features';
-            $this->displayName=$this->l('Modulo de pruebas');
-            $this->version='1.2';
-            $this->author='Ignacio Casado';
-            $this->description=$this->l('Modulo de prueba.');
-            $this->ps_versions_compliancy=array('min'=>'1.5.2','max'=>'1.6.1.19');
-            $this->bootstrap=true;
-            parent::__construct();
-        }
-        public function install(){
-            if (!parent::install()) {
-                return false;
-            }
-            $sql_file=dirname(__FILE__).'/install/install.sql';
-            $this->loadSQLFile($sql_file);
-            return false;
-            if (!$this->registerHook('displayProductTabContent'))
-            return false;
-            Configuration::updateValue('MYMOD_GRADES','1');
-            Configuration::updateValue('MYMOD_COMMENTS','1');
-            return true;
-        }
-        public function uninstall(){
-            if (!parent::uninstall())
-            return false;
-            $sql_file=dirname(__FILE__).'/install/uninstall.sql';
-            if (!$this->loadSQLFile($sql_file))
-            return false;
-            Configuration::deleteByName('MYMOD_GRADES');
-            Configuration::deleteByName('MYMOD_COMMENTS');
-            return true;
-        }
-        public function processConfiguration(){
-            if (Tools::isSubmit('my_form')){
-                $enable_grades=Tools::getValue('enable_grades');
-                $enable_comments=Tools::getValue('enable_comments');
-                Configuration::updateValue('MYMOD_GRADES',$enable_grades);
-                Configuration::updateValue('MYMOD_COMMENTS',$enable_comments);
-                $this->context->smarty->assign('confirmation', 'ok');
-            }
-        }
-        public function assignConfiguration(){
-            $enable_grades=Configuration::get('MYMOD_GRADES');
-            $enable_comments=Configuration::get('MYMOD_COMMENTS');
-            $this->context->smarty->assign('enable_grades',$enable_grades);
-            $this->context->smarty->assign('enable_comments',$enable_comments);
+{if $enable_grades eq 1 || $enable_comments eq 1}
+  <h3 class="page-product-heading" id="mymodcomments-content-tab"{if isset($new_comment_posted)} data-scroll="true"{/if}>{l s='Comentarios del producto' mod='mymodcomments'}</h3>
+    <div class="rte">
+        <form action="" method="POST" id="comment-form">
+        {if $enable_grades eq 1}
+            {foreach from=$comments item=comment}
+                <p>
+                <strong> Comentario #{$comment.id_mymod_comment}:</strong>
+                {$comment.comment}<br>
+                <strong> Puntuacion:{$comment.grade}/5<br>
+                </p><br>
+            {/foreach}
+            <div class="form-group">
+                <label for="grade"> Puntuacion: </label>
+                <div class="row">
+                    <div class="col-xs-4">
+                        <input id="grade" name="grade" value="0" type="number" class="rating" min="0" max"5" step="1" data-size="sm">
+                    </div>
+                </div>
+            </div>
+        {/if}
+        {if $enable_comments eq 1}
             
-        }
-        public function getContent(){
-            $this->processConfiguration();
-            $this->assignConfiguration();
-            return $this->display(__FILE__,'getContent.tpl');
-        }
-        public function processProductTabContent(){
-
-            if (Tools::isSubmit('mymod_pc_submit_comment'))  {
-                $id_product=Tools::getValue('id_product');
-                $grade=Tools::getValue('grade');
-                if ($grade!=0) {
-                    $comment=Tools::getValue('comment');
-                    $comment=strval(pSQL($comment));
-                    if ($comment=='') {
-                        
-                    }else{
-                        $insert=array(
-                        'id_product'=>(int) $id_product,
-                        'grade'=>(int) $grade,
-                        'comment'=>pSQL("$comment"),
-                        'date_add'=>date('Y-m-d H:i:s'),
-                    );
-                    Db::getInstance()->insert('mymod_comment',$insert);
-                    $this->context->smarty->assign('new_comment_posted','true');
-                    }
-                    
-                }
-                
-            }
-        }
-        public function hookDisplayProductTabContent($params){
-            $this->processProductTabContent();
-            $this->assignProductTabContent();
-            return $this->display(__FILE__,'displayProductTabContent.tpl');
-        }
-        public function assignProductTabContent(){
-            $enable_grades=Configuration::get('MYMOD_GRADES');
-            $enable_comments=Configuration::get('MYMOD_COMMENTS');
-            $id_product=Tools::getValue('id_product');
-            $comments=Db::getInstance()->executeS('SELECT * FROM '._DB_PREFIX_.'mymod_comment WHERE id_product = '.(int)$id_product );
-            $this->context->controller->addCSS($this->_path.'views/css/micoso.css','all');
-            $this->context->controller->addCSS($this->_path.'views/css/star-rating.css','all');
-            $this->context->controller->addJS($this->_path.'views/js/star-rating.js');
-            $this->context->controller->addJS($this->_path.'views/js/micoso.js');
-            $this->context->smarty->assign('enable_grades',$enable_grades);
-            $this->context->smarty->assign('enable_comments',$enable_comments);
-            $this->context->smarty->assign('comments',$comments);
-        }
-    }
+            <div class="form-group">
+                <label for="comment">Comentario: </label>
+                <textarea  name="comment" id="comment" ></textarea>
+            </div>
+        {/if}
+        <div class="submit">
+                <button type="submit" name="mymod_pc_submit_comment" class="button btn btn-default-button-default">
+                <span>Mandar<i class="icon-chevron-rigth rigth"></i></span>
+            </div>
+        </form>
+     </div>
+{/if}
