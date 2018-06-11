@@ -5,11 +5,34 @@
         {if $enable_grades eq 1}
             {foreach from=$comments item=comment}
                 <p>
-                <strong> Comentario #{$comment.id_mymod_comment}:</strong>
+                <h4><strong> Comentario #{$comment.id_mymod_comment}</strong></h4>
+                <strong> Nombre: {$comment.namen}</strong><br>
+                <strong> Correo: {$comment.email}</strong><br>
+                <strong> Comentario: </strong>
                 {$comment.comment}<br>
                 <strong> Puntuacion:{$comment.grade}/5<br>
                 </p><br>
             {/foreach}
+            <div class="form-group">
+                <label for="name">
+                {l s='Nombre:' mod='mymodcomments'}
+                </label>
+                <div class="row">
+                    <div class="col-xs-4">
+                    <input type="text" name="name" id="name"class="form-control"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="email">
+                {l s='Email: ' mod='mymodcomments'}
+                </label>
+                <div class="row">
+                    <div class="col-xs-4">
+                    <input type="email" name="email" id="email" class="form-control"/>
+                    </div>
+                </div>
+            </div>
             <div class="form-group">
                 <label for="grade"> Puntuacion: </label>
                 <div class="row">
