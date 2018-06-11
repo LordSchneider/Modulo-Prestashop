@@ -107,6 +107,7 @@
             $this->context->smarty->assign('enable_grades',$enable_grades);
             $this->context->smarty->assign('enable_comments',$enable_comments);
             $this->context->smarty->assign('comments',$comments);
+            $comments=Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'mymod_comment` WHERE `id_product` = '.(int)$id_product.' ORDER BY `date_add` DESC LIMIT 3');
         }
         public function onClickOption($type, $href=false){
             $confirm_reset= $this->l('Reinicializar este modulo borrara todos los datos de tu base de datos.¿Deseas reinicializarlo? ');
