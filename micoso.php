@@ -17,7 +17,7 @@
             $this->name='Micoso';
             $this->tab='front_office_features';
             $this->displayName=$this->l('Modulo de pruebas');
-            $this->version='1.2';
+            $this->version='1.1';
             $this->author='Ignacio Casado';
             $this->description=$this->l('Modulo de prueba.');
             $this->ps_versions_compliancy=array('min'=>'1.5.2','max'=>'1.6.1.19');
@@ -30,8 +30,7 @@
             }
             $sql_file=dirname(__FILE__).'/install/install.sql';
             $this->loadSQLFile($sql_file);
-            return false;
-            if (!$this->registerHook('displayProductTabContent'))
+            if (!$this->registerHook('displayProductTabContent') && !$this->registerHook('displayBackOfficeHeader'))
             return false;
             Configuration::updateValue('MYMOD_GRADES','1');
             Configuration::updateValue('MYMOD_COMMENTS','1');
@@ -69,26 +68,24 @@
             return $this->display(__FILE__,'getContent.tpl');
         }
         public function processProductTabContent(){
-
             if (Tools::isSubmit('mymod_pc_submit_comment'))  {
                 $id_product=Tools::getValue('id_product');
                 $grade=Tools::getValue('grade');
-                if ($grade!=0) {
-                    $comment=Tools::getValue('comment');
-                    $comment=strval(pSQL($comment));
-                    if ($comment=='') {
-                        
-                    }else{
+                $name=Tools::getValue('name');
+                $mail=Tools::getValue('email');
+                $comment=Tools::getValue('comment');
+                $comment=pSQL($comment);
+                if ($grade!=0 || !empty($name) || !empty($comment) || !empty($mail)) {
                         $insert=array(
                         'id_product'=>(int) $id_product,
+                        'namen'=>"$name",
+                        'email'=>"$mail",
                         'grade'=>(int) $grade,
-                        'comment'=>pSQL("$comment"),
+                        'comment'=>"$comment",
                         'date_add'=>date('Y-m-d H:i:s'),
                     );
                     Db::getInstance()->insert('mymod_comment',$insert);
                     $this->context->smarty->assign('new_comment_posted','true');
-                    }
-                    
                 }
                 
             }
@@ -110,5 +107,25 @@
             $this->context->smarty->assign('enable_grades',$enable_grades);
             $this->context->smarty->assign('enable_comments',$enable_comments);
             $this->context->smarty->assign('comments',$comments);
+        }
+        public function onClickOption($type, $href=false){
+            $confirm_reset= $this->l('Reinicializar este modulo borrara todos los datos de tu base de datos.¿Deseas reinicializarlo? ');
+            $reset_callback="return mymodcomments_reset('".addslashes($confirm_reset)."');";
+            $matchType=array(
+                'reset'=>"return confirm('Resetear?');",
+                'delete'=>"return confirm('Quieres borrar?');",
+                'disable'=>"return confirm('Seguro, chaz?')"
+            );
+            if (isset($matchType[$type])) {
+                return $matchType[$type];
+                return '';
+            }
+        }
+        public function hookDisplayBackOfficeHeader(){
+            if(Tools::getValue('controller')!='AdminModules'){
+                return '';
+            }
+            $this->context->smarty->assign('pc_base_dir',__PS_BASE_URI__.'modules/'.$this->name.'/');
+            $this->display(__FILE__,'displayBackOfficeHeader.tpl');
         }
     }
