@@ -13,6 +13,16 @@
                 <strong> Puntuacion:{$comment.grade}/5<br>
                 </p><br>
             {/foreach}
+            <div class="rte">
+                {assign var=params value=[
+                'module_action' => 'list',
+                'product_rewrite' => $product->link_rewrite,
+                'id_product'=> $smarty.get.id_product,
+                'page' => 1
+                ]}
+	            <a href="{$link->getModuleLink('mymodcomments', 'comments', $params)}">
+                {l s='See all comments' mod='mymodcomments'}</a>
+            </div>
             <div class="form-group">
                 <label for="name">
                 {l s='Nombre:' mod='mymodcomments'}
