@@ -87,7 +87,6 @@
                     Db::getInstance()->insert('mymod_comment',$insert);
                     $this->context->smarty->assign('new_comment_posted','true');
                 }
-                
             }
         }
         public function hookDisplayProductTabContent($params){
@@ -99,7 +98,7 @@
             $enable_grades=Configuration::get('MYMOD_GRADES');
             $enable_comments=Configuration::get('MYMOD_COMMENTS');
             $id_product=Tools::getValue('id_product');
-            $comments=Db::getInstance()->executeS('SELECT * FROM '._DB_PREFIX_.'mymod_comment WHERE id_product = '.(int)$id_product );
+            $comments=Db::getInstance()->executeS('SELECT * FROM '._DB_PREFIX_.'mymod_comment WHERE id_product = '.(int)$id_product.' ORDER BY `date_add` DESC LIMIT 3');
             $this->context->controller->addCSS($this->_path.'views/css/micoso.css','all');
             $this->context->controller->addCSS($this->_path.'views/css/star-rating.css','all');
             $this->context->controller->addJS($this->_path.'views/js/star-rating.js');
@@ -115,7 +114,6 @@
             $matchType=array(
                 'reset'=>"return confirm('Resetear?');",
                 'delete'=>"return confirm('Quieres borrar?');",
-                'disable'=>"return confirm('Seguro, chaz?')"
             );
             if (isset($matchType[$type])) {
                 return $matchType[$type];
