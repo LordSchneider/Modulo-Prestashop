@@ -2,8 +2,8 @@
 <module>
 	<name>Micoso</name>
 	<displayName><![CDATA[Modulo de pruebas]]></displayName>
-	<version><![CDATA[1.0]]></version>
-	<description><![CDATA[Modulo de prueba]]></description>
+	<version><![CDATA[1.1]]></version>
+	<description><![CDATA[Modulo de prueba.]]></description>
 	<author><![CDATA[Ignacio Casado]]></author>
 	<tab><![CDATA[front_office_features]]></tab>
 	<is_configurable>1</is_configurable>
